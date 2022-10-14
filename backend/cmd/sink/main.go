@@ -72,7 +72,7 @@ func main() {
 			msg = assetMessageHandler.ParseAssets(msg.Decode()) // TODO: filter type only once (use iterator inside or bring ParseAssets out here).
 			dur := time.Now().Sub(start).Milliseconds()
 			if dur > 0 {
-				log.Printf("asset, type: %d, msg: %+v", msg.TypeID(), msg)
+				log.Printf("asset, type: %d, dur: %d, msg: %+v", msg.TypeID(), dur, msg)
 			}
 		}
 
