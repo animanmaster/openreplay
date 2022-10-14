@@ -31,7 +31,7 @@ func (e *AssetsCache) ParseAssets(msg messages.Message) messages.Message {
 				Name:  m.Name,
 				Value: e.handleURL(m.SessionID(), m.BaseURL, m.Value),
 			}
-			log.Println(m.BaseURL, m.Value)
+			//log.Println(m.BaseURL, m.Value)
 			newMsg.SetMeta(msg.Meta())
 			return newMsg
 		} else if m.Name == "style" {
@@ -40,7 +40,7 @@ func (e *AssetsCache) ParseAssets(msg messages.Message) messages.Message {
 				Name:  m.Name,
 				Value: e.handleCSS(m.SessionID(), m.BaseURL, m.Value),
 			}
-			log.Println(m.BaseURL, m.Value)
+			//log.Println(m.BaseURL, m.Value)
 			newMsg.SetMeta(msg.Meta())
 			return newMsg
 		}
@@ -49,7 +49,7 @@ func (e *AssetsCache) ParseAssets(msg messages.Message) messages.Message {
 			ID:   m.ID,
 			Data: e.handleCSS(m.SessionID(), m.BaseURL, m.Data),
 		}
-		log.Println(m.BaseURL, m.Data)
+		//log.Println(m.BaseURL, m.Data)
 		newMsg.SetMeta(msg.Meta())
 		return newMsg
 	case *messages.CSSInsertRuleURLBased:
@@ -58,7 +58,7 @@ func (e *AssetsCache) ParseAssets(msg messages.Message) messages.Message {
 			Index: m.Index,
 			Rule:  e.handleCSS(m.SessionID(), m.BaseURL, m.Rule),
 		}
-		log.Println(m.BaseURL, m.Rule)
+		//log.Println(m.BaseURL, m.Rule)
 		newMsg.SetMeta(msg.Meta())
 		return newMsg
 	case *messages.AdoptedSSReplaceURLBased:
@@ -66,7 +66,7 @@ func (e *AssetsCache) ParseAssets(msg messages.Message) messages.Message {
 			SheetID: m.SheetID,
 			Text:    e.handleCSS(m.SessionID(), m.BaseURL, m.Text),
 		}
-		log.Println(m.BaseURL, m.Text)
+		//log.Println(m.BaseURL, m.Text)
 		newMsg.SetMeta(msg.Meta())
 		return newMsg
 	case *messages.AdoptedSSInsertRuleURLBased:
@@ -75,7 +75,7 @@ func (e *AssetsCache) ParseAssets(msg messages.Message) messages.Message {
 			Index:   m.Index,
 			Rule:    e.handleCSS(m.SessionID(), m.BaseURL, m.Rule),
 		}
-		log.Println(m.BaseURL, m.Rule)
+		//log.Println(m.BaseURL, m.Rule)
 		newMsg.SetMeta(msg.Meta())
 		return newMsg
 	}

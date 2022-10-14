@@ -70,7 +70,10 @@ func main() {
 			msg.TypeID() == messages.MsgAdoptedSSInsertRuleURLBased {
 			start := time.Now()
 			msg = assetMessageHandler.ParseAssets(msg.Decode()) // TODO: filter type only once (use iterator inside or bring ParseAssets out here).
-			log.Printf("asset, type: %d, dur: %d", msg.TypeID(), time.Now().Sub(start).Milliseconds())
+			dur := time.Now().Sub(start).Milliseconds()
+			if dur > 0 {
+				log.Printf("asset, type: %d, msg: %+v", msg.TypeID(), msg)
+			}
 		}
 
 		// Filter message
