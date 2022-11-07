@@ -23,6 +23,7 @@ import { Tooltip } from 'react-tippy';
 import { toast } from 'react-toastify';
 import { confirm } from 'UI';
 import stl from './AassistActions.module.css';
+import ScreenRecorder from 'App/components/Session_/ScreenRecorder/ScreenRecorder';
 
 function onReject() {
   toast.info(`Call was rejected.`);
@@ -172,6 +173,10 @@ function AssistActions({
           <div className={stl.divider} />
         </>
       )}
+
+      {/* @ts-ignore wtf? */}
+      <ScreenRecorder />
+      <div className={stl.divider} />
 
       {/* @ts-ignore */}
       <Tooltip title="Go live to initiate remote control" disabled={livePlay}>

@@ -1,8 +1,13 @@
 import React from 'react';
 import { connectPlayer } from 'Player';
-import { getStatusText } from 'Player/MessageDistributor/managers/AssistManager';
 import type { MarkedTarget } from 'Player/MessageDistributor/StatedScreen/StatedScreen';
-import { CallingState, ConnectionStatus, RemoteControlStatus } from 'Player/MessageDistributor/managers/AssistManager';
+import {
+  SessionRecordingStatus,
+  getStatusText,
+  CallingState,
+  ConnectionStatus,
+  RemoteControlStatus,
+} from 'Player/MessageDistributor/managers/AssistManager';
 
 import AutoplayTimer from './Overlay/AutoplayTimer';
 import PlayIconLayer from './Overlay/PlayIconLayer';
@@ -12,23 +17,24 @@ import ElementsMarker from './Overlay/ElementsMarker';
 import RequestingWindow, { WindowType } from 'App/components/Assist/RequestingWindow';
 
 interface Props {
-  playing: boolean,
-  completed: boolean,
-  inspectorMode: boolean,
-  loading: boolean,
-  live: boolean,
-  liveStatusText: string,
-  concetionStatus: ConnectionStatus,
-  autoplay: boolean,
-  markedTargets: MarkedTarget[] | null,
-  activeTargetIndex: number,
-  calling: CallingState,
-  remoteControl: RemoteControlStatus
+  playing: boolean;
+  completed: boolean;
+  inspectorMode: boolean;
+  loading: boolean;
+  live: boolean;
+  liveStatusText: string;
+  concetionStatus: ConnectionStatus;
+  autoplay: boolean;
+  markedTargets: MarkedTarget[] | null;
+  activeTargetIndex: number;
+  calling: CallingState;
+  remoteControl: RemoteControlStatus;
+  recordingState: SessionRecordingStatus;
 
-  nextId: string,
-  togglePlay: () => void,
-  closedLive?: boolean,
-  livePlay?: boolean,
+  nextId: string;
+  togglePlay: () => void;
+  closedLive?: boolean;
+  livePlay?: boolean;
 }
 
 function Overlay({
@@ -48,33 +54,52 @@ function Overlay({
   livePlay,
   calling,
   remoteControl,
+  recordingState,
 }: Props) {
-  const showAutoplayTimer = !live && completed && autoplay && nextId
-  const showPlayIconLayer = !live && !markedTargets && !inspectorMode && !loading && !showAutoplayTimer;
+  const showAutoplayTimer = !live && completed && autoplay && nextId;
+  const showPlayIconLayer =
+    !live && !markedTargets && !inspectorMode && !loading && !showAutoplayTimer;
   const showLiveStatusText = live && livePlay && liveStatusText && !loading;
 
-  const showRequestWindow = live && (calling === CallingState.Connecting || remoteControl === RemoteControlStatus.Requesting)
-  const requestWindowType = calling === CallingState.Connecting ? WindowType.Call : remoteControl === RemoteControlStatus.Requesting ? WindowType.Control : null
+  const showRequestWindow =
+    live &&
+    (calling === CallingState.Connecting ||
+      remoteControl === RemoteControlStatus.Requesting ||
+      recordingState === SessionRecordingStatus.Requesting);
+
+  const getRequestWindowType = () => {
+    if (calling === CallingState.Connecting) {
+      return WindowType.Call
+    }
+    if (remoteControl === RemoteControlStatus.Requesting) {
+      return WindowType.Control
+    }
+    if (recordingState === SessionRecordingStatus.Requesting) {
+      return WindowType.Record
+    }
+
+    return null;
+  }
 
   return (
     <>
-      {showRequestWindow ? <RequestingWindow type={requestWindowType} /> : null}
-      { showAutoplayTimer && <AutoplayTimer /> }
-      { showLiveStatusText &&
-        <LiveStatusText text={liveStatusText} concetionStatus={closedLive ? ConnectionStatus.Closed : concetionStatus} />
-      }
-      { loading ? <Loader /> : null }
-      { showPlayIconLayer &&
-        <PlayIconLayer playing={playing} togglePlay={togglePlay} />
-      }
-      { markedTargets && <ElementsMarker targets={ markedTargets } activeIndex={activeTargetIndex}/>
-      }
+      {showRequestWindow ? <RequestingWindow getWindowType={getRequestWindowType} /> : null}
+      {showAutoplayTimer && <AutoplayTimer />}
+      {showLiveStatusText && (
+        <LiveStatusText
+          text={liveStatusText}
+          concetionStatus={closedLive ? ConnectionStatus.Closed : concetionStatus}
+        />
+      )}
+      {loading ? <Loader /> : null}
+      {showPlayIconLayer && <PlayIconLayer playing={playing} togglePlay={togglePlay} />}
+      {markedTargets && <ElementsMarker targets={markedTargets} activeIndex={activeTargetIndex} />}
     </>
   );
 }
 
-
-export default connectPlayer(state => ({
+// @ts-ignore
+export default connectPlayer((state) => ({
   playing: state.playing,
   loading: state.messagesLoading || state.cssLoading,
   completed: state.completed,
@@ -87,5 +112,6 @@ export default connectPlayer(state => ({
   activeTargetIndex: state.activeTargetIndex,
   livePlay: state.livePlay,
   calling: state.calling,
+  recordingState: state.recordingState,
   remoteControl: state.remoteControl,
 }))(Overlay);
