@@ -13,6 +13,7 @@ import Tabs from 'Components/Session/Tabs';
 import stl from './playerBlockHeader.module.css';
 import AssistActions from '../Assist/components/AssistActions';
 import AssistTabs from '../Assist/components/AssistTabs';
+import ScreenRecorder from './ScreenRecorder/ScreenRecorder';
 
 const SESSIONS_ROUTE = sessionsRoute();
 const ASSIST_ROUTE = assistRoute();
@@ -145,6 +146,7 @@ export default class PlayerBlockHeader extends React.PureComponent {
                         {isAssist && <AssistActions userId={userId} isCallActive={isCallActive} agentIds={agentIds} />}
                     </div>
                 </div>
+                <ScreenRecorder />
                 {!isAssist && (
                     <div className="relative border-l" style={{ minWidth: '270px' }}>
                         <Tabs
