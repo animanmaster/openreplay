@@ -239,7 +239,7 @@ function AssistActions({
 }
 
 const con = connect(
-  (state) => {
+  (state: any) => {
     const permissions = state.getIn(['user', 'account', 'permissions']) || [];
     return {
       hasPermission: permissions.includes('ASSIST_CALL'),
@@ -251,7 +251,7 @@ const con = connect(
 );
 
 export default con(
-  connectPlayer((state) => ({
+  connectPlayer((state: any) => ({
     calling: state.calling,
     annotating: state.annotating,
     remoteControlStatus: state.remoteControl,
