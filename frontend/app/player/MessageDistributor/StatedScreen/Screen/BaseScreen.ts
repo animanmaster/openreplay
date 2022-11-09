@@ -59,6 +59,8 @@ export default abstract class BaseScreen {
   protected readonly screen: HTMLDivElement;
   protected readonly controlButton: HTMLDivElement;
   protected parentElement: HTMLElement | null = null;
+  private remoteControlEnabled = false;
+  private recordingEnabled = false;
 
   constructor() {
     const iframe = document.createElement('iframe');
@@ -106,12 +108,22 @@ export default abstract class BaseScreen {
   }
 
   toggleRemoteControlStatus(isEnabled: boolean ) {
-    const styles = isEnabled ? { border: '2px dashed blue' } : { border: 'unset'}
+    this.remoteControlEnabled = isEnabled;
+    if (!isEnabled) {
+      const styles = this.recordingEnabled ? { border: '2px dashed red' } : { border: 'unset'}
+      return Object.assign(this.screen.style, styles)
+    }
+    const styles = { border: '2px dashed blue' }
     return Object.assign(this.screen.style, styles)
   }
 
   toggleRecordingStatus(isEnabled: boolean) {
-    const styles = isEnabled ? { border: '2px dashed red' } : { border: 'unset'}
+    this.recordingEnabled = isEnabled;
+    if (!isEnabled) {
+      const styles = this.remoteControlEnabled ? { border: '2px dashed blue' } : { border: 'unset'}
+      return Object.assign(this.screen.style, styles)
+    }
+    const styles = { border: '2px dashed red' }
     return Object.assign(this.screen.style, styles)
   }
 

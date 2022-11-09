@@ -277,6 +277,7 @@ export default class AssistManager {
     const recordingState = getState().recordingState
     if (!this.socket || recordingState === SessionRecordingStatus.Off) return;
 
+    console.log('stop rec')
     this.socket.emit("stop_recording")
     this.toggleRecording(false)
   }
@@ -284,7 +285,8 @@ export default class AssistManager {
   private toggleRecording = (isAccepted: boolean) => {
     this.md.toggleRecordingStatus(isAccepted)
 
-    update({ recordingStatus: isAccepted ? SessionRecordingStatus.Recording : SessionRecordingStatus.Off })
+    update({ recordingState: isAccepted ? SessionRecordingStatus.Recording : SessionRecordingStatus.Off })
+    console.log('Im here', isAccepted, getState().recordingState)
   }
 
   /* ==== Remote Control ==== */
