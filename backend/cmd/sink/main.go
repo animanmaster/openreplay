@@ -119,6 +119,9 @@ func main() {
 				log.Printf("can't commit messages: %s", err)
 			}
 			consumer.Close()
+			if err := writer.CloseAll(); err != nil {
+				log.Printf("can't close all file descriptors: %s", err)
+			}
 			os.Exit(0)
 		case <-tick:
 			if err := writer.SyncAll(); err != nil {
